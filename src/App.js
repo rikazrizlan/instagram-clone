@@ -5,6 +5,8 @@ import Post from './components/Post';
 
 import {db, auth} from './Firebase';
 import { Button, makeStyles, Modal, Input} from '@material-ui/core';
+import ImageUpload from './components/ImageUpload';
+import  InstagramEmbed from 'react-instagram-embed';
 
 function getModalStyle() {
   const top = 50;
@@ -62,7 +64,7 @@ function App() {
   }, [user, username]);
 
   useEffect(() => {
-    db.collection('posts').onSnapshot(snapshot => {
+    db.collection('posts').orderBy('timeStamp', 'desc').onSnapshot(snapshot => {
       setPosts(snapshot.docs.map(doc => ({
         id: doc.id,
         post: doc.data()
@@ -75,7 +77,27 @@ function App() {
 
     //create user
     auth.createUserWithEmailAndPassword(email, password)
-    .catch((error) => setError(error.message));
+    .catch((error) => setError(error.message))
+    
+    setOpen(false);
+    setUsername("");
+    setEmail("");
+    setPassword("");
+    setError("");
+  }
+
+  const signin = (event) => {
+    event.preventDefault();
+
+    //sign in user
+    auth.signInWithEmailAndPassword(email, password)
+    .catch((error) => setError(error.message))
+
+    
+    setOpenLogin(false);
+    setEmail("");
+    setPassword("");
+    setError("");
   }
 
   return (
@@ -124,18 +146,19 @@ function App() {
             <Input placeholder="password" type="password" value={password} 
               onChange={(e) => setPassword(e.target.value)}
             />
-            <Button type="submit">Log In</Button>
+            <Button onClick={signin} type="submit">Log In</Button>
           </form>        
         </div>
       </Modal>
-
-
 
       <div className="app-header">
         <img className="logo" src={logo} alt="Instagram"/>
         {
         user?
-          <Button onClick={() => auth.signOut()}>Log Out</Button> :
+        <div className="btn-container">
+          <h4>@{user.displayName}</h4>
+          <Button variant="contained" onClick={() => auth.signOut()}>Log Out</Button>
+        </div> :
           <div className="btn-container">
             <Button onClick={() => setOpenLogin(true)}>LogIn</Button>
             <Button variant="contained" onClick={() => setOpen(true)}>Sign Up</Button>
@@ -143,11 +166,30 @@ function App() {
         }
       </div>
 
+      {user && <ImageUpload username={user.displayName} />}
+
+      <div className="app-posts">
       {
         posts.map(({id, post}) => (
           <Post key={id} username={post.username} image={post.image} caption={post.caption} />
         ))
       }
+      </div>
+
+      <InstagramEmbed
+        url='https://instagr.am/p/Zw9o4/'
+        clientAccessToken='process.env.REACT_APP_FIREBASE_PROJECT_ID|process.env.REACT_APP_FIREBASE_API_KEY'
+        maxWidth={320}
+        hideCaption={false}
+        containerTagName='div'
+        protocol=''
+        injectScript
+        onLoading={() => {}}
+        onSuccess={() => {}}
+        onAfterRender={() => {}}
+        onFailure={() => {}}
+      />
+      
     </div>
   );
 }
