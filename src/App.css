@@ -7,11 +7,14 @@
 }
 
 .app-header {
+  position: sticky;
+  top: 0;
   background: #fff;
   padding: 15px;
   border-bottom: 1px solid lightgray;
   display: flex;
   justify-content: space-between;
+  z-index: 1;
 }
 
 .btn-container {
@@ -35,7 +38,14 @@
 
 .app-posts {
   padding: 20px;
+  display: flex;
+  justify-content: center;
 }
+
+.app-posts-right {
+  margin-left: 20px;
+}
+
 
 .post-container {
   max-width: 500px;
@@ -85,6 +95,11 @@
   color: white;
 }
 
+.post-comments .alert {
+  background-color: rgb(243, 78, 78);
+  color: white;
+}
+
 .image-upload {
   display: flex;
   flex-direction: column;
@@ -107,4 +122,38 @@
 .image-upload .caption-input {
   padding: 20px;
   text-align: center;
+}
+
+.comment-form {
+  display: flex;
+  margin: 10px;
+}
+
+.post-input {
+  flex: 1;
+  border: 1px solid lightgrey;
+  border-radius: 10px;
+  padding: 10px;
+  outline: none;
+}
+
+.post-btn {
+  flex: 0;
+  cursor: pointer;
+  padding: 10px;
+  border: none;
+  outline: none;
+  background: #222;
+  color: white;
+  border-radius: 10px;
+  margin-left: 10px;
+}
+
+.post-comments {
+  padding: 20px;
+  width: 100%;
+}
+
+.post-comments p {
+  color: black;
 }

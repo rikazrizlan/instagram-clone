@@ -169,26 +169,30 @@ function App() {
       {user && <ImageUpload username={user.displayName} />}
 
       <div className="app-posts">
-      {
-        posts.map(({id, post}) => (
-          <Post key={id} username={post.username} image={post.image} caption={post.caption} />
-        ))
-      }
+        <div className="app-posts-left">
+          {
+          posts.map(({id, post}) => (
+            <Post user={user} key={id} postId={id} username={post.username} image={post.image} caption={post.caption} />
+          ))
+          }
+        </div>
+        <div className="app-posts-right">
+          <InstagramEmbed
+          url='https://instagr.am/p/Zw9o4/'
+          maxWidth={320}
+          hideCaption={false}
+          containerTagName='div'
+          protocol=''
+          injectScript
+          onLoading={() => {}}
+          onSuccess={() => {}}
+          onAfterRender={() => {}}
+          onFailure={() => {}}
+          />
+        </div>
       </div>
 
-      <InstagramEmbed
-        url='https://instagr.am/p/Zw9o4/'
-        clientAccessToken='process.env.REACT_APP_FIREBASE_PROJECT_ID|process.env.REACT_APP_FIREBASE_API_KEY'
-        maxWidth={320}
-        hideCaption={false}
-        containerTagName='div'
-        protocol=''
-        injectScript
-        onLoading={() => {}}
-        onSuccess={() => {}}
-        onAfterRender={() => {}}
-        onFailure={() => {}}
-      />
+      
       
     </div>
   );
